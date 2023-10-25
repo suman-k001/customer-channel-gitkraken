@@ -283,47 +283,53 @@ class UsersController extends Controller
 
         return response()->json($response);
     }
+
     //---------------------------------------------------------
     public function getItemProducts(Request $request, $id): JsonResponse
     {
+
         try {
             $item = User::withTrashed()->where('id', $id)->first();
 
             $response['data']['item'] = $item;
 
             if ($request->has("q")) {
-                $matchingProductIds = $item->products()
+                $matchingUserIds = $item->users()
                     ->where(function ($q) use ($request) {
-                        $q->where('products.name', 'LIKE', '%' . $request->q . '%')
-                        ->orWhere('products.slug', 'LIKE', '%' . $request->q . '%');
+                        $q->where('first_name', 'LIKE', '%' . $request->q . '%')
+                            ->orWhere('middle_name', 'LIKE', '%' . $request->q . '%')
+                            ->orWhere('last_name', 'LIKE', '%' . $request->q . '%')
+                            ->orWhere('display_name', 'LIKE', '%' . $request->q . '%')
+                            ->orWhere('email', 'LIKE', '%' . $request->q . '%');
                     })
-                    ->pluck('products.id')
+                    ->pluck('id')
                     ->toArray();
             } else {
-                $matchingProductIds = $item->products()
-                    ->pluck('products.id')
+                $matchingUserIds = $item->users()
+                    ->pluck('id')
                     ->toArray();
             }
+
             $rows = config('vaahcms.per_page');
 
             if ($request->rows) {
                 $rows = $request->rows;
             }
 
-            $list = $item->products()
-                ->whereIn('products.id', $matchingProductIds)
+            $list = $item->users()
+                ->whereIn('id', $matchingUserIds)
                 ->orderBy('pivot_is_active', 'desc')
                 ->paginate($rows);
 
-            foreach ($list as $product) {
-                $data = User::getPivotData($product->pivot);
+            foreach ($list as $user) {
+                $data = User::getPivotData($user->pivot);
 
-                $product['json'] = $data;
-                $product['json_length'] = count($data);
+                $user['json'] = $data;
+                $user['json_length'] = count($data);
             }
 
             $response['data']['list'] = $list;
-            $response['data']['matchingProductIds'] = $matchingProductIds;
+            $response['data']['matchingUserIds'] = $matchingUserIds;
             $response['success'] = true;
 
             return response()->json($response);
