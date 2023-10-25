@@ -1,0 +1,28 @@
+{
+    "name": "vaahcms/customerchannel",
+    "description": "Customers and Channels relationship",
+    "version": "0.0.1",
+    "authors": [
+        {
+            "name": "Suman",
+            "email": "suman-k001@webreinvent.com"
+        }
+    ],
+    "require": {
+        "php": "^7.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "VaahCms\\Modules\\CustomerChannel\\Providers\\CustomerChannelServiceProvider"
+            ],
+            "aliases": {
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "VaahCms\\Modules\\CustomerChannel\\": ""
+        }
+    }
+}

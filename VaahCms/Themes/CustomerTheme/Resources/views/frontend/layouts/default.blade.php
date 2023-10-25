@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        {!! config('settings.global.script_after_head_start') !!}
+
+        @if(isset($title) && $title)
+            <title>{{$title}}</title>
+        @elseif(isset($data) && (is_array($data) || is_object($data)) && is_subclass_of($data, 'Illuminate\Database\Eloquent\Model'))
+            {!! get_field($data, 'seo-meta-tags') !!}
+        @else
+            <title>{!! config('settings.global.site_title'); !!}</title>
+        @endif
+
+        <meta name="csrf-token" id="_token" content="{{ csrf_token() }}">
+
+        <base href="{{\URL::to('/')}}">
+
+        <meta name="current-url" id="current_url" content="{{ url()->current() }}">
+
+        <meta name="debug" id="debug" content="true">
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vaahcss@latest/css/vaahcss.min.css" />
+        <link rel="stylesheet" href="https://bulma.io/vendor/fontawesome-free-5.15.2-web/css/all.min.css">
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+        <link rel="stylesheet" href="https://unpkg.com/buefy/dist/buefy.min.css">
+
+
+
+
+
+    <!--
+        @if(env('THEME_CUSTOMERTHEME_ENV') == 'develop')
+            <link href="http://localhost:8080/customertheme/assets/css/build.css"
+                  rel="stylesheet" media="screen">
+            <link href="http://localhost:8080/customertheme/assets/css/style.css"
+                  rel="stylesheet" media="screen">
+        @else
+            <link  href="{{vh_theme_assets_url("CustomerTheme", "css/build.css")}}"
+                   rel="stylesheet" media="screen">
+            <link  href="{{vh_theme_assets_url("CustomerTheme", "css/style.css")}}"
+                rel="stylesheet" media="screen">
+        @endif
+        -->
+
+        @yield('vaahcms_extend_frontend_head')
+
+        @yield('vaahcms_extend_frontend_css')
+
+        {!! config('settings.global.script_before_head_close') !!}
+    </head>
+
+	<body>
+        {!! config('settings.global.script_after_body_start') !!}
+
+        @include("vaahcms::frontend.partials.errors")
+        @include("vaahcms::frontend.partials.flash")
+
+        @yield('content')
+        @section('footer')
+            <div class="has-text-centered has-text-danger">
+                &copy; <a href="{!! config('settings.global.copyright_link_custom'); !!}">
+                    {!! config('settings.global.copyright_text_custom'); !!}
+                </a> <br>
+                {!! config('settings.global.copyright_year_custom'); !!}
+            </div>
+        @show
+
+        <script src="https://unpkg.com/jquery@3.6.0/dist/jquery.js"></script>
+        <script src="https://unpkg.com/axios@0.21.1/dist/axios.min.js"></script>
+        <script src="https://unpkg.com/vue@2.6.14/dist/vue.js"></script>
+        <script src="https://unpkg.com/buefy/dist/buefy.min.js"></script>
+        <script src="{{vh_theme_assets_url("CustomerTheme", "build/script.js")}}"></script>
+
+        @yield('vaahcms_extend_frontend_scripts')
+
+        {!! config('settings.global.script_before_body_close') !!}
+
+	</body>
+</html>

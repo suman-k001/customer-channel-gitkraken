@@ -1,0 +1,28 @@
+{
+    "name": "vaahcms/customertheme",
+    "description": "this theme is my first ever theme",
+    "version": "0.0.1",
+    "authors": [
+        {
+            "name": "suman",
+            "email": "support@vaah.dev"
+        }
+    ],
+    "require": {
+        "php": "^7.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "VaahCms\\Themes\\CustomerTheme\\Providers\\CustomerThemeServiceProvider"
+            ],
+            "aliases": {
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "VaahCms\\Themes\\CustomerTheme\\": ""
+        }
+    }
+}

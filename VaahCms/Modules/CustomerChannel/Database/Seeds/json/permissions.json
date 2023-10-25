@@ -1,0 +1,50 @@
+[
+    {
+        "name": "Has Access of Customer Section",
+        "module": "CustomerChannel",
+        "section": "customers",
+        "details": "This will allow user to see the link of customers."
+    },
+    {
+        "name": "Can Update Customer",
+        "module": "CustomerChannel",
+        "section": "customers",
+        "details": "This will allow user to edit customers in the customer section."
+    },
+    {
+        "name": "Can Delete Customer",
+        "module": "CustomerChannel",
+        "section": "customers",
+        "details": "This will allow user to delete customers in the customer section."
+    },
+    {
+        "name": "Can Create Customer",
+        "module": "CustomerChannel",
+        "section": "customers",
+        "details": "This will allow user to create customers in the customer section."
+    },
+    {
+        "name": "Has Access of Channel Section",
+        "module": "CustomerChannel",
+        "section": "channels",
+        "details": "This will allow user to see the link of setting section."
+    },
+    {
+        "name": "Can Update Channel",
+        "module": "CustomerChannel",
+        "section": "channels",
+        "details": "This will allow user to edit channels in the customer section."
+    },
+    {
+        "name": "Can Delete Channel",
+        "module": "CustomerChannel",
+        "section": "channels",
+        "details": "This will allow user to delete channels in the customer section."
+    },
+    {
+        "name": "Can Create Channel",
+        "module": "CustomerChannel",
+        "section": "channels",
+        "details": "This will allow user to create channels in the customer section."
+    }
+]
