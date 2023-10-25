@@ -1789,7 +1789,7 @@ document.title = 'CustomerChannel';
 
 .card .bottom .bottom-bottom {
     position: absolute;
-    bottom: 1rem;
+    bottom:0.6rem;
     left: 1.5rem;
     right: 1.5rem;
     display: flex;
@@ -1800,6 +1800,7 @@ document.title = 'CustomerChannel';
 .card .bottom .bottom-bottom .social-links-container {
     display: flex;
     gap: 1rem;
+    padding-top: 0.5rem;
 }
 
 .card .bottom .bottom-bottom .social-links-container svg {
