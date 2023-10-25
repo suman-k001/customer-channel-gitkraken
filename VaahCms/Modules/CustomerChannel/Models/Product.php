@@ -20,6 +20,8 @@ class Product extends Model
     use SoftDeletes;
     use CrudWithUuidObservantTrait;
 
+    public array $matching_users = [];
+
     //-------------------------------------------------
     protected $table = 'products';
     //-------------------------------------------------
@@ -779,26 +781,33 @@ class Product extends Model
         $response['data']['item'] = $item;
 
         if ($request->has("q")) {
-            $list = $item->users()->where(function ($q) use ($request) {
-                $q->where('first_name', 'LIKE', '%' . $request->q . '%')
-                    ->orWhere('middle_name', 'LIKE', '%' . $request->q . '%')
-                    ->orWhere('last_name', 'LIKE', '%' . $request->q . '%')
-                    ->orWhere(DB::raw('concat(first_name," ",middle_name," ",last_name)'), 'like', '%' . $request->q . '%')
-                    ->orWhere(DB::raw('concat(first_name," ",last_name)'), 'like', '%' . $request->q . '%')
-                    ->orWhere('display_name', 'like', '%' . $request->q . '%')
-                    ->orWhere('email', 'LIKE', '%' . $request->q . '%');
-            });
-        } else {
-            $list = $item->users();
-        }
+            $matching_users = $item->users()
+                ->where(function ($q) use ($request) {
+                    $q->where('vh_users.first_name', 'LIKE', '%' . $request->q . '%')
+                        ->orWhere('vh_users.middle_name', 'LIKE', '%' . $request->q . '%')
+                        ->orWhere('vh_users.last_name', 'LIKE', '%' . $request->q . '%')
+                        ->orWhere(DB::raw('concat(vh_users.first_name," ",vh_users.middle_name," ",vh_users.last_name)'), 'like', '%' . $request->q . '%')
+                        ->orWhere(DB::raw('concat(vh_users.first_name," ",vh_users.last_name)'), 'like', '%' . $request->q . '%')
+                        ->orWhere('vh_users.display_name', 'like', '%' . $request->q . '%')
+                        ->orWhere('vh_users.email', 'LIKE', '%' . $request->q . '%');
+                })
+                ->pluck('vh_users.id')
+                ->toArray();
 
+        } else {
+            $matching_users = $item->users()
+                ->pluck('vh_users.id')
+                ->toArray();
+        }
         $rows = config('vaahcms.per_page');
 
         if ($request->has('rows')) {
             $rows = $request->rows;
         }
-
-        $list = $list->paginate($rows);
+        $list = $item->users()
+            ->whereIn('vh_users.id', $matching_users)
+            ->orderBy('pivot_is_active', 'desc')
+            ->paginate($rows);
 
         foreach ($list as $user) {
             $data = self::getPivotData($user->pivot);
@@ -808,8 +817,8 @@ class Product extends Model
         }
 
         $response['data']['list'] = $list;
+        $response['data']['matchingUsersIds'] = $matching_users;
         $response['success'] = true;
-
         return $response;
     }
 
@@ -872,6 +881,7 @@ class Product extends Model
 
 
     }
+
     //-------------------------------------------------
     public static function bulkChangeUserStatus($request): array
     {

@@ -24,7 +24,7 @@ let empty_states = {
     product_users_query: {
         q: null,
         page: null,
-        rows: 2,
+        rows: 3,
     },
     action: {
         type: null,
@@ -80,7 +80,8 @@ export const useProductStore = defineStore({
         product_users_query: vaah().clone(empty_states.product_users_query),
         is_btn_loading: false,
         modalData:null,
-        displayModal:false
+        displayModal:false,
+        selected_users:[]
     }),
     getters: {},
     actions: {
@@ -894,6 +895,7 @@ export const useProductStore = defineStore({
 
             if (data) {
                 this.product_users = data;
+                this.selected_users=data.matchingUsersIds;
             }
         },
         // ------------------------
@@ -932,7 +934,7 @@ export const useProductStore = defineStore({
 
         },
         bulkActions (input, action) {
-            let user_id = this.product_users.list.data.map((product) => product.id);
+            let user_id = this.selected_users;
             let params = {
                 id: this.item.id,
                 user_id: user_id
