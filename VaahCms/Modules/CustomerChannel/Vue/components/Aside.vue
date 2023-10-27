@@ -21,7 +21,7 @@ const items = ref([
             },
             {
                 label: 'products',
-                icon: 'fa-regular fa-chart-bar',
+                icon: 'fa-brands fa-product-hunt',
                 to: "/products"
             },
             {
