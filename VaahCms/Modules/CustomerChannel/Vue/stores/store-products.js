@@ -576,6 +576,7 @@ export const useProductStore = defineStore({
         },
         toUsers(item) {
             this.item = item;
+            this.resetProductUserFilters();
             this.getItemUsers();
             this.$router.push({name: 'products.users', params: {id: item.id}});
         },
