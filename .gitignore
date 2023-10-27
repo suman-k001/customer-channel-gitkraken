@@ -16,7 +16,6 @@ npm-debug.log
 package-lock.json
 composer.lock
 phpunit.xml
-docker-compose.yml
 yarn-error.log
 /.fleet
 /.idea
