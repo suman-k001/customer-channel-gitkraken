@@ -890,6 +890,7 @@ export const useUserStore = defineStore({
         toList()
         {
             this.item = null;
+            this.resetUserRolesFilters();
             this.$router.push({name: 'users.index'})
         },
         //---------------------------------------------------------------------
@@ -897,6 +898,7 @@ export const useUserStore = defineStore({
         {
             this.item = vaah().clone(this.assets.empty_item);
             this.getFormMenu();
+            this.resetUserRolesFilters();
             this.$router.push({name: 'users.form'})
         },
         //---------------------------------------------------------------------
@@ -914,6 +916,7 @@ export const useUserStore = defineStore({
         //---------------------------------------------------------------------
         async toProducts(item) {
             this.item = item;
+            await this.resetUserRolesFilters();
             await this.getUserProducts();
             this.$router.push({name: 'users.product', params: { id: item.id }})
         },
