@@ -9,6 +9,7 @@ use WebReinvent\VaahCms\Models\User as UserBase;
 class User extends UserBase
 {
     public array $matchingProductIds = [];
+
     public function products(): BelongsToMany
     {
         return $this->belongsToMany(
@@ -64,9 +65,9 @@ class User extends UserBase
 
         $inputs = $request->all();
 
-        $role = Product::find($inputs['inputs']['product_id']);
+        $product = Product::find($inputs['inputs']['product_id']);
 
-        if ($inputs['inputs']['id'] == 1 && $role->slug == 'richest'
+        if ($inputs['inputs']['id'] == 1 && $product->slug == 'richest'
             && $inputs['data']['is_active'] == 0) {
             $response['success'] = false;
             $response['errors'][] = trans('vaahcms-user.first_user_super_administrator');
@@ -81,7 +82,6 @@ class User extends UserBase
             'updated_by' => Auth::user()->id,
             'updated_at' => Carbon::now()
         ];
-
 
         if ($inputs['inputs']['product_id']) {
             $pivot = $item->products->find($inputs['inputs']['product_id'])->pivot;
@@ -105,7 +105,6 @@ class User extends UserBase
         $response['data'] = [];
 
         return $response;
-
 
     }
 
