@@ -294,19 +294,16 @@ class UsersController extends Controller
             $response['data']['item'] = $item;
 
             if ($request->has("q")) {
-                $matchingUserIds = $item->users()
+                $matchingProductIds = $item->products()
                     ->where(function ($q) use ($request) {
-                        $q->where('first_name', 'LIKE', '%' . $request->q . '%')
-                            ->orWhere('middle_name', 'LIKE', '%' . $request->q . '%')
-                            ->orWhere('last_name', 'LIKE', '%' . $request->q . '%')
-                            ->orWhere('display_name', 'LIKE', '%' . $request->q . '%')
-                            ->orWhere('email', 'LIKE', '%' . $request->q . '%');
+                        $q->where('products.name', 'LIKE', '%' . $request->q . '%') // Specify the table alias
+                        ->orWhere('products.slug', 'LIKE', '%' . $request->q . '%'); // Specify the table alias
                     })
-                    ->pluck('id')
+                    ->pluck('products.id') // Specify the table alias
                     ->toArray();
             } else {
-                $matchingUserIds = $item->users()
-                    ->pluck('id')
+                $matchingProductIds = $item->products()
+                    ->pluck('products.id') // Specify the table alias
                     ->toArray();
             }
 
@@ -316,20 +313,20 @@ class UsersController extends Controller
                 $rows = $request->rows;
             }
 
-            $list = $item->users()
-                ->whereIn('id', $matchingUserIds)
-                ->orderBy('pivot_is_active', 'desc')
+            $list = $item->products()
+                ->whereIn('products.id', $matchingProductIds)
+                ->orderBy('pivot_is_active', 'desc') // Add the orderBy before paginate
                 ->paginate($rows);
 
-            foreach ($list as $user) {
-                $data = User::getPivotData($user->pivot);
+            foreach ($list as $product) {
+                $data = User::getPivotData($product->pivot);
 
-                $user['json'] = $data;
-                $user['json_length'] = count($data);
+                $product['json'] = $data;
+                $product['json_length'] = count($data);
             }
 
             $response['data']['list'] = $list;
-            $response['data']['matchingUserIds'] = $matchingUserIds;
+            $response['data']['matchingProductIds'] = $matchingProductIds; // Return matching product IDs
             $response['success'] = true;
 
             return response()->json($response);
