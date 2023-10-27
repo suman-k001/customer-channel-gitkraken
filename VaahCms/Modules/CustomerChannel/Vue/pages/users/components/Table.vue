@@ -50,7 +50,7 @@ const useVaah = vaah();
                      header="Last Login At"
             >
                 <template #body="prop">
-                    {{ prop.data.last_login_at }}
+                    {{ prop.data.last_login_at ?? 'Haven\'t logged in yet!' }}
                 </template>
             </Column>
 
